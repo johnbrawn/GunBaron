@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" action="{% url 'qr' %}">
+        <input type="text" style="width: 200px;" name="input">
+        <button>Press me</button>
+    </form>
+    <img src="{% static 'media/img/nurlan.jpg' %}">
+</body>
+</html>

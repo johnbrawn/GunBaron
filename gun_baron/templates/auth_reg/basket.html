@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'static/basket.css' %}">
+    <script rel="script" src="{% static 'js/basket.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="h1 text-primary text-center">Your Basket</h1>
+        <hr>
+        <div class="order">
+            <div class="main">
+                <div class="header">
+                    <div class="name">Name</div>
+                    <div class="count">Count</div>
+                    <div class="price">Price</div>
+                    <div>Delete</div>
+                </div>
+                {% if orders %}
+                    {% for i in orders %}
+                        <div class="product">
+                            <div class="name">
+                                <div class="img">
+                                    <img src="{{ i.product.get_image.0.image.url }}">
+                                </div>
+
+                                <a href="{% url 'product' i.product.slug %}">{{ i.product.name }}</a>
+                            </div>
+                            <div class="count">
+                                <input type="number" name="" value="{{ i.amount }}" class="" id="id_{{ forloop.counter0 }}" onchange="count({{ forloop.counter0 }})">
+                            </div>
+                            <div class="price">
+                                <span>{{ i.total_price }} </span>
+                                <span>$</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="delete" onclick="del()">
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <button onclick="buy()">Buy</button>
+                <p class="total_price float-right" id="total_price">{{ total_price }}</p>
+            </div>
+        </div>
+
+    </div>
+
+    {% csrf_token %}
+    <script rel="script">
+    function del(){
+        if ($("#delete").is(":checked")){
+            console.log(1);
+        }
+    }
+    function csrf() {
+        function getCookie(name) {
+        var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        let csrftoken = getCookie('csrftoken');
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    }
+
+    function buy(){
+        csrf();
+        $.ajax({
+            url : "{% url 'purchase' %}",
+            type:'post',
+            success : function (msg) {
+                window.location.href = "{% url 'finish' %}"
+            }
+        });
+    }
+
+    function count(id){
+        csrf();
+        $.ajax({
+            url: "{% url 'change_basket' %}",
+            data: {"count" : $("#id_" + id).val(), "id" : id},
+            type: 'post',
+            success: function (msg) {
+                $("#total_price").text(msg['total_price']);
+            }
+        });
+    }
+    </script>
+{% endblock content %}

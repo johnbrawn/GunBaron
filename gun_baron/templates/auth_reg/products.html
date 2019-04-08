@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'static/products.css' %}">
+{% endblock head %}
+{% block content %}
+<div class="container">
+	<h1 class="section-title text-center">{{ name }}</h1>
+	<div class="row align-self-center">
+		{% if weapons %}
+			{% for i in weapons %}
+				<div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6">
+					<div class="product">
+                        <div class="description">
+                            <img src="{{ i.image.url }}">
+                            <a href="{% url 'product' slug=i.product.slug %}">{{ i.product.name }}</a>
+                            <p>{{ i.product.description }}</p>
+                            <p class="price">{{ i.product.price }} tg</p>
+                            <button class="btn btn-primary" onclick="buy({{ i.product.id }})">Buy</button>
+                        </div>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
+{% csrf_token %}
+<script rel="script">
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function buy(id) {
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        $.ajax({
+            url:"{% url 'buy' %}",
+            type:'post',
+            data:{id:id},
+            success:function (msg) {
+
+            }
+        })
+
+    }
+</script>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{% static 'static/reg_auth.css' %}">
+
+</head>
+<body>
+	<div class="main top-container">
+		<div class="content">
+			<div class="reg borders">
+					<form method="post" action="">
+						{% csrf_token %}
+						{{ registrationForm.as_p }}
+						<!-- {{ registrationForm|crispy }} -->
+<!-- 						<p>{{ error }}</p>
+						<div class="form-group row">
+							<label>Login</label>
+							<input type="text" name="{{ registrationForm.login.name }}" class="form-control" placeholder="example@ex.com">
+						</div>
+						<div class="form-group row">
+							<label>Password</label>
+							<input type="password" name="{{ registrationForm.password.name }}" class="form-control" placeholder="Example!1">
+						</div>
+						<div class="form-group row">
+							<label>Firstname</label>
+							<input type="text" name="{{ registrationForm.first_name.name }}" class="form-control" placeholder="Qwerty">
+						</div>
+						<div class="form-group row">
+							<label>Secondname</label>
+							<input type="text" name="{{ registrationForm.second_name.name }}" class="form-control" placeholder="Asdf">
+						</div> -->
+						<div>
+							<button class="btn btn-primary">Sign up</button>
+						</div>
+					</form>
+			</div>
+			<!-- <div class="auth borders">
+				<form method="post" action="">
+					{% csrf_token %}
+					<div class="form-group row">
+						<label>Login</label>
+						<input type="text" name="{{ authorizationForm.login.name }}" class="form-control">
+					</div>
+					<div class="form-group row">
+						<label>Password</label>
+						<input type="password" name="{{ authorizationForm.password.name }}" class="form-control">
+					</div>
+					{{ authorizationForm.as_p }}
+					<div>
+						<button type="submit" class = "">Sign in</button>
+					</div>
+				</form>
+			</div> -->
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

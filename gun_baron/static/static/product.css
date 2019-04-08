@@ -1,0 +1,56 @@
+.main {
+    margin-top: 35px;
+}
+.product {
+    display: flex;
+    justify-content: space-between;
+}
+.mainImg {
+    height: 300px;
+}
+.mainImg img{
+    height: 100%;
+}
+h1 {
+    font-family: "Amazon Ember",Arial,sans-serif;
+}
+.price {
+    font-family: Karla,Arial,Helvetica,sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #e82b1a;
+}
+.description {
+    margin-top: 30px;
+}
+.description p {
+    font-family: "Amazon Ember",Arial,sans-serif;
+}
+.buy_btn {
+    display: flex;
+    float: right;
+}
+.amount {
+    width: 50px;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-right: 80px;
+}
+.notification {
+    display: none;
+    border: 1px solid black;
+    border-radius: 5px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.notification img {
+    width: 30px;
+    height: 30px;
+    float: right;
+}
+.notification div {
+    margin: 40px;
+}

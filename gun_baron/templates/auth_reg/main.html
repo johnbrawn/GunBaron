@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="{% static 'static/main.css' %}">
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+	<img src="{% static 'media/img/main_background.jpg' %}" style="width: 100%;">
+	<hr>
+	<div class="container">
+        {% for i in categories %}
+            {% if forloop.counter0 <= 3 %}
+                <a class="h3 section-title text-center" href="{% url 'products' i.id %}">{{ i.name }}</a>
+                <div class="row align-self-center">
+                    {% for j in i.get_product %}
+                        {% if forloop.counter0 <= 2 %}
+                            <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6">
+                                <div class="product">
+                                    <div class="description">
+                                        <img src="{{ j.get_image.0.image.url }}">
+                                        <a href="{% url 'product' slug=j.slug %}">{{ j.name }}</a>
+                                        <p>{{ j.description }}</p>
+                                        <p class="price">{{ j.price }} tg</p>
+                                        <button class="btn btn-primary" onclick="buy({{ j.id }})">Buy</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+	</div>
+    <div class="notification" id="notification">
+        <img onclick="closeNotif()" src="{% static "media/img/icon_close.png" %}">
+        <div>Product has been added on your BASKET</div>
+    </div>
+    {% csrf_token %}
+    <script rel="script">
+        function closeNotif(){
+            $("#notification").hide();
+        }
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        function buy(id) {
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+            $.ajax({
+                url:"{% url 'buy' %}",
+                type:'post',
+                data:{id:id},
+                success:function (msg) {
+                    $("#notification").show();
+                }
+            })
+        }
+    </script>
+{% endblock content %}
