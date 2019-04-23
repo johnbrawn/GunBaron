@@ -10,8 +10,23 @@
         {% if product %}
             <div class="product">
                 <div class="leftCol">
-                    <div class="mainImg">
-                        <img src="{{ image.url }}">
+                    <div class="rowq">
+                        <div class="columnq small-11q small-centeredq">
+                            <div class="slider slider-single">
+                                {% for i in images %}
+                                    <div>
+                                        <img src="{{ i.image.url }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="slider slider-nav">
+                                {% for i in images %}
+                                    <div class="item">
+                                        <img src="{{ i.image.url }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="rightCol">
@@ -58,7 +73,7 @@
                 </div>
             {% endif %}
             <br>
-            {% if comments %}
+            {% if auth %}
                 {% for i in comments %}
                     <div>
                         {{ i.comment_author.login }}
@@ -123,5 +138,6 @@
                 }
             })
         }
+
     </script>
 {% endblock content %}

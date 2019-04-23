@@ -73,10 +73,11 @@
                     }
                 }
             });
+            let amount = 1;
             $.ajax({
                 url:"{% url 'buy' %}",
                 type:'post',
-                data:{id:id},
+                data:{id:id, amount:amount},
                 success:function (msg) {
                     $("#notification").show();
                 }

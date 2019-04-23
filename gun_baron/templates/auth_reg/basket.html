@@ -36,7 +36,7 @@
                                 <span>$</span>
                             </div>
                             <div>
-                                <input type="checkbox" id="delete" onclick="del()">
+                                <input type="button" id="delete" onclick="del({{ forloop.counter0 }})">
                             </div>
                         </div>
                     {% endfor %}
@@ -50,11 +50,17 @@
 
     {% csrf_token %}
     <script rel="script">
-    function del(){
-        if ($("#delete").is(":checked")){
-            console.log(1);
-        }
+    function del(id){
+        $.ajax({
+            url: "{% url 'delete_pr_basket' %}",
+            type: 'get',
+            data: {'id':id},
+            success: function (msg) {
+                window.location.href = "{% url 'basket' %}"
+            }
+        })
     }
+
     function csrf() {
         function getCookie(name) {
         var cookieValue = null;

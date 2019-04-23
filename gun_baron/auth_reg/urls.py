@@ -15,4 +15,7 @@ urlpatterns = [
 	path('change_basket/', views.on_change_basket, name='change_basket'),
 	path('finish/', views.finish, name='finish'),
 	path('qr/', views.qr, name='qr'),
+	path('delete_pr_basket', views.delete_from_basket, name='delete_pr_basket'),
+	path('user-list/', views.UserViewSet.as_view(), name='user_view'),
+	path('user-view/<pk>', views.UserView.as_view(), name='user'),
 ]

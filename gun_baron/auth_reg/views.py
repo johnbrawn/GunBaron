@@ -6,14 +6,33 @@ from .forms import *
 from .models import *
 from products.models import *
 from orders.models import *
+from .serializers import *
+
+from rest_framework import viewsets
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_protect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from rest_framework import generics
 
 import qrcode
 
+
+class UserViewSet(generics.ListCreateAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 def reg(request):
     registrationForm = RegistForm(request.POST or None)
@@ -63,6 +82,7 @@ def logout(request):
 def products(request, id):
     weapons = ProductImage.objects.all().filter(product__category__id=id, main=True)
     name = Category.objects.all().get(id=id)
+    surname = Category.objects
     if request.session.has_key('login'):
         auth = request.session['login']
         return render(request, 'auth_reg/products.html', locals())
@@ -134,6 +154,8 @@ def on_change_basket(request):
 def product(request, slug):
     product = ProductImage.objects.get(product__slug=slug, main=True).product
     image = ProductImage.objects.get(product__slug=slug, main=True).image
+    images = ProductImage.objects.filter(product__slug=slug)
+    print(images)
 
     form = CommentForm(request.POST or None)
 
@@ -177,3 +199,13 @@ def qr(request):
             img.save("static/media/img/nurlan.jpg")
 
     return render(request, "auth_reg/qr_code.html", locals())
+
+
+def delete_from_basket(request):
+    a = int(request.GET.get('id', None))
+    order = Order.objects.get(status='n')
+    order.get_product()[a].delete()
+    print(order)
+    if len(order.get_product()) == 0:
+        order.delete()
+    return HttpResponseRedirect('../basket')
