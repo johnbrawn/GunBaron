@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 import simplejson
@@ -46,6 +47,7 @@ def reg(request):
     return render(request, 'auth_reg/index.html', locals())
 
 
+# @login_required(login_url='/auth')
 def main(request):
     categories = Category.objects.all()
     context = {'categories': categories}
